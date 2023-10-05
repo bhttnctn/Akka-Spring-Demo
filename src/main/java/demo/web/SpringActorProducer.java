@@ -1,30 +1,28 @@
-package demo.web.spring;
+package demo.web;
 
 import akka.actor.Actor;
 import akka.actor.IndirectActorProducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 public class SpringActorProducer implements IndirectActorProducer {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ApplicationContext applicationContext;
     private final String actorBeanName;
-    private final Object[] args;
 
-    public SpringActorProducer(ApplicationContext applicationContext, String actorBeanName, Object... args) {
+    public SpringActorProducer(ApplicationContext applicationContext, String actorBeanName) {
         this.applicationContext = applicationContext;
         this.actorBeanName = actorBeanName;
-        this.args = args;
     }
 
     @Override
     public Actor produce() {
-        if (args == null) {
-            return (Actor) applicationContext.getBean(actorBeanName);
-        } else {
-            return (Actor) applicationContext.getBean(actorBeanName, args);
-        }
+        return (Actor) applicationContext.getBean(actorBeanName);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Class<? extends Actor> actorClass() {
         return (Class<? extends Actor>) applicationContext.getType(actorBeanName);
