@@ -1,17 +1,20 @@
 package demo.web.actor;
 
 import akka.actor.UntypedActor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import demo.web.model.Response;
+import demo.web.spring.ActorComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-import javax.ws.rs.container.AsyncResponse;
-
-@Component("callbackActor")
+@ActorComponent("callbackActor")
 @Scope("prototype")
 public class CallbackActor extends UntypedActor {
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void preStart() {
@@ -19,10 +22,11 @@ public class CallbackActor extends UntypedActor {
     }
 
     @Override
-    public void onReceive(Object message) {
+    public void onReceive(Object message) throws JsonProcessingException {
 
-        if (message instanceof AsyncResponse) {
-            ((AsyncResponse) message).resume("Message processed successfully...");
+        if (message instanceof Response) {
+            Response response = (Response) message;
+            response.getAsyncResponse().resume(objectMapper.writeValueAsString(response));
         } else {
             unhandled(message);
         }

@@ -22,8 +22,8 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-@Path("/stateful-async-non-blocking")
-public class StatefulAsyncController {
+@Path("/stateless-async-non-blocking")
+public class StatelessAsyncController {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -38,7 +38,7 @@ public class StatefulAsyncController {
     @POST
     @Path("/{id}")
     @Consumes({"application/json"})
-    public void postStatefulAsyncNonBlockingMessage(@Suspended AsyncResponse asyncResponse, //
+    public void postStatelessAsyncNonBlockingMessage(@Suspended AsyncResponse asyncResponse, //
             @Context HttpHeaders headers, //
             @Context SecurityContext securityContext, //
             @Context UriInfo uriInfo, //
@@ -46,7 +46,7 @@ public class StatefulAsyncController {
             String body) throws JsonProcessingException {
 
         Request request = objectMapper.readValue(body, Request.class);
-        Message.SetStatefulMessage message = new Message.SetStatefulMessage(asyncResponse, id, request);
+        Message.SetStatelessMessage message = new Message.SetStatelessMessage(asyncResponse, id, request);
 
         backendActor.tell(message, callbackActor);
     }
@@ -54,13 +54,13 @@ public class StatefulAsyncController {
     @GET
     @Path("/{id}")
     @Consumes({"application/json"})
-    public void getStatefulAsyncNonBlockingMessage(@Suspended AsyncResponse asyncResponse, //
+    public void getStatelessAsyncNonBlockingMessage(@Suspended AsyncResponse asyncResponse, //
             @Context HttpHeaders headers, //
             @Context SecurityContext securityContext, //
             @Context UriInfo uriInfo,
             @PathParam("id") Long id) {
 
-        Message.GetStatefulMessage message = new Message.GetStatefulMessage(asyncResponse, id);
+        Message.GetStatelessMessage message = new Message.GetStatelessMessage(asyncResponse, id);
 
         backendActor.tell(message, callbackActor);
     }

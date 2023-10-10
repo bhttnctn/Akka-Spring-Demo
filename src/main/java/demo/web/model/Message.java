@@ -1,36 +1,78 @@
 package demo.web.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.ws.rs.container.AsyncResponse;
 
 public class Message {
 
-    @JsonProperty("payload")
-    private String payload;
-    @JsonProperty("id")
-    private Long id;
+    protected AsyncResponse asyncResponse;
+    protected Long messageId;
 
-    @JsonProperty("payload")
-    public String getPayload() {
-        return payload;
+    public Message(AsyncResponse asyncResponse, Long messageId) {
+        this.asyncResponse = asyncResponse;
+        this.messageId = messageId;
     }
 
-    @JsonProperty("payload")
-    public void setPayload(String payload) {
-        this.payload = payload;
+    public AsyncResponse getAsyncResponse() {
+        return asyncResponse;
     }
 
-    @JsonProperty("id")
-    public Long getId() {
-        return id;
+    public Long getMessageId() {
+        return messageId;
     }
 
-    @JsonProperty("id")
-    public void setId(Long id) {
-        this.id = id;
+    public static class StatefulMessage extends Message {
+
+        public StatefulMessage(AsyncResponse asyncResponse, Long messageId) {
+            super(asyncResponse, messageId);
+        }
     }
 
-    @Override
-    public String toString() {
-        return "Message{" + "payload='" + payload + '\'' + ", id=" + id + '}';
+    public static class StatelessMessage extends Message {
+
+        public StatelessMessage(AsyncResponse asyncResponse, Long messageId) {
+            super(asyncResponse, messageId);
+        }
+    }
+
+    public static class GetStatefulMessage extends StatefulMessage {
+
+        public GetStatefulMessage(AsyncResponse asyncResponse, Long messageId) {
+            super(asyncResponse, messageId);
+        }
+    }
+
+    public static class SetStatefulMessage extends StatefulMessage {
+
+        private Request message;
+
+        public SetStatefulMessage(AsyncResponse asyncResponse, Long messageId, Request message) {
+            super(asyncResponse, messageId);
+            this.message = message;
+        }
+
+        public Request getMessage() {
+            return message;
+        }
+    }
+
+    public static class GetStatelessMessage extends StatelessMessage {
+
+        public GetStatelessMessage(AsyncResponse asyncResponse, Long messageId) {
+            super(asyncResponse, messageId);
+        }
+    }
+
+    public static class SetStatelessMessage extends StatelessMessage {
+
+        private Request message;
+
+        public SetStatelessMessage(AsyncResponse asyncResponse, Long messageId, Request message) {
+            super(asyncResponse, messageId);
+            this.message = message;
+        }
+
+        public Request getMessage() {
+            return message;
+        }
     }
 }

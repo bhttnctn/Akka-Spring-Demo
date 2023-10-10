@@ -1,22 +1,24 @@
 package demo.web.model;
 
-import javax.ws.rs.container.AsyncResponse;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Request {
 
-    private AsyncResponse asyncResponse;
-    private Message message;
+    @JsonProperty("payload")
+    private String payload;
 
-    public Request(AsyncResponse asyncResponse, Message message) {
-        this.asyncResponse = asyncResponse;
-        this.message = message;
+    @JsonProperty("payload")
+    public String getPayload() {
+        return payload;
     }
 
-    public AsyncResponse getAsyncResponse() {
-        return asyncResponse;
+    @JsonProperty("payload")
+    public void setPayload(String payload) {
+        this.payload = payload;
     }
 
-    public Message getMessage() {
-        return message;
+    @Override
+    public String toString() {
+        return "StatefulRequest = {" + "payload='" + payload + '}';
     }
 }
