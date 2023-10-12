@@ -24,10 +24,16 @@ public class CallbackActor extends UntypedActor {
     @Override
     public void onReceive(Object message) throws JsonProcessingException {
 
+        final javax.ws.rs.core.Response.ResponseBuilder responseBuilder;
+
         if (message instanceof Response) {
+
             Response response = (Response) message;
-            response.getAsyncResponse()
-                    .resume(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response));
+            responseBuilder = javax.ws.rs.core.Response.status(200)
+                    .entity(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response));
+            responseBuilder.header("Content-Type", "application/json");
+
+            response.getAsyncResponse().resume(responseBuilder.build());
         } else {
             unhandled(message);
         }
