@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -61,6 +62,20 @@ public class StatefulAsyncController {
             @PathParam("id") Long id) {
 
         Message.GetStatefulMessage message = new Message.GetStatefulMessage(asyncResponse, id);
+
+        backendActor.tell(message, callbackActor);
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Consumes({"application/json"})
+    public void deleteStatefulAsyncNonBlockingMessage(@Suspended AsyncResponse asyncResponse, //
+            @Context HttpHeaders headers, //
+            @Context SecurityContext securityContext, //
+            @Context UriInfo uriInfo,
+            @PathParam("id") Long id) {
+
+        Message.DeleteStatefulMessage message = new Message.DeleteStatefulMessage(asyncResponse, id);
 
         backendActor.tell(message, callbackActor);
     }

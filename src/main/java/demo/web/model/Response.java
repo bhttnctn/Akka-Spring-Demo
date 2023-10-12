@@ -27,4 +27,8 @@ public class Response {
     public String getMessage() {
         return message;
     }
+
+    public int getMessageCounter() {
+        return messageCounter;
+    }
 }

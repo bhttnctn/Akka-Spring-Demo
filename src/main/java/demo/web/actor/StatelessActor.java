@@ -33,20 +33,15 @@ public class StatelessActor extends UntypedActor {
     @Override
     public void onReceive(Object message) {
 
-        if (message instanceof Message.StatelessMessage) {
+        Message.StatelessMessage statelessMessage = (Message.StatelessMessage) message;
+        Long messageId = statelessMessage.getMessageId();
 
-            Message.StatelessMessage statelessMessage = (Message.StatelessMessage) message;
-            Long messageId = statelessMessage.getMessageId();
+        Props actorWorkerProp = FromConfig.getInstance()
+                .props(springExtension.props(StatelessWorkerActor.class, "statelessWorkerActor"))
+                .withDispatcher(context().props().dispatcher())
+                .withRouter(context().props().routerConfig());
+        ActorRef statelessWorkerActor = actorSystem.actorOf(actorWorkerProp, "statelessWorkerActor" + messageId);
 
-            Props actorWorkerProp = FromConfig.getInstance()
-                    .props(springExtension.props(StatelessWorkerActor.class, "statelessWorkerActor"))
-                    .withDispatcher(context().props().dispatcher())
-                    .withRouter(context().props().routerConfig());
-            ActorRef statelessWorkerActor = actorSystem.actorOf(actorWorkerProp, "statelessWorkerActor" + messageId);
-
-            statelessWorkerActor.forward(statelessMessage, getContext());
-        } else {
-            unhandled(message);
-        }
+        statelessWorkerActor.forward(statelessMessage, getContext());
     }
 }

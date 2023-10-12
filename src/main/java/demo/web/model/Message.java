@@ -55,6 +55,13 @@ public class Message {
         }
     }
 
+    public static class DeleteStatefulMessage extends StatefulMessage {
+
+        public DeleteStatefulMessage(AsyncResponse asyncResponse, Long messageId) {
+            super(asyncResponse, messageId);
+        }
+    }
+
     public static class GetStatelessMessage extends StatelessMessage {
 
         public GetStatelessMessage(AsyncResponse asyncResponse, Long messageId) {

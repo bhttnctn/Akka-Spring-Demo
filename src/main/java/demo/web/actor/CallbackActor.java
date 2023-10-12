@@ -26,7 +26,8 @@ public class CallbackActor extends UntypedActor {
 
         if (message instanceof Response) {
             Response response = (Response) message;
-            response.getAsyncResponse().resume(objectMapper.writeValueAsString(response));
+            response.getAsyncResponse()
+                    .resume(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response));
         } else {
             unhandled(message);
         }

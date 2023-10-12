@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Scope;
 @ActorComponent("statefulActor")
 @Scope("prototype")
 public class StatefulActor extends UntypedActor {
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -36,27 +37,23 @@ public class StatefulActor extends UntypedActor {
     @Override
     public void onReceive(Object message) {
 
-        if (message instanceof Message.StatefulMessage) {
+        Message.StatefulMessage statefulMessage = (Message.StatefulMessage) message;
+        Long messageId = statefulMessage.getMessageId();
 
-            Message.StatefulMessage statefulMessage = (Message.StatefulMessage) message;
-            Long messageId = statefulMessage.getMessageId();
+        ActorRef statefulWorkerActor;
+        if (manager.getActor(messageId) == null) {
+            Props actorWorkerProp = FromConfig.getInstance()
+                    .props(springExtension.props(StatefulWorkerActor.class, "statefulWorkerActor"))
+                    .withDispatcher(context().props().dispatcher())
+                    .withRouter(context().props().routerConfig());
+            statefulWorkerActor = actorSystem.actorOf(actorWorkerProp,
+                    "statefulWorkerActor" + messageId);
 
-            ActorRef statefulWorkerActor;
-            if (manager.getActor(messageId) == null) {
-                Props actorWorkerProp = FromConfig.getInstance()
-                        .props(springExtension.props(StatefulWorkerActor.class, "statefulWorkerActor"))
-                        .withDispatcher(context().props().dispatcher())
-                        .withRouter(context().props().routerConfig());
-                statefulWorkerActor = actorSystem.actorOf(actorWorkerProp,
-                        "statefulWorkerActor" + messageId);
-
-                manager.putActor(messageId, statefulWorkerActor);
-            } else {
-                statefulWorkerActor = manager.getActor(messageId);
-            }
-            statefulWorkerActor.forward(statefulMessage, getContext());
+            manager.putActor(messageId, statefulWorkerActor);
         } else {
-            unhandled(message);
+            statefulWorkerActor = manager.getActor(messageId);
         }
+
+        statefulWorkerActor.forward(statefulMessage, context());
     }
 }

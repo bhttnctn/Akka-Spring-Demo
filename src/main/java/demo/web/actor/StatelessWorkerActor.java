@@ -19,6 +19,7 @@ public class StatelessWorkerActor extends UntypedActor {
 
     private ApplicationContext applicationContext;
     private String actorName;
+    private int messageCounter = 0;
 
     public StatelessWorkerActor(ApplicationContext applicationContext, String actorName) {
         this.applicationContext = applicationContext;
@@ -36,12 +37,12 @@ public class StatelessWorkerActor extends UntypedActor {
         if (message instanceof Message.GetStatelessMessage) {
             Message.GetStatelessMessage statelessMessage = (Message.GetStatelessMessage) message;
             Response response = new Response(statelessMessage.getAsyncResponse(), statelessMessage.getMessageId(),
-                    "GET method - Stateless actor does not hold any message !!!", 1);
+                    "GET method - Stateless actor does not hold any message !!!", ++messageCounter);
             sender().tell(response, self());
         } else if (message instanceof Message.SetStatelessMessage) {
             Message.SetStatelessMessage statelessMessage = (Message.SetStatelessMessage) message;
             Response response = new Response(statelessMessage.getAsyncResponse(), statelessMessage.getMessageId(),
-                    "POST method - Stateless actor does not hold any message !!!", 1);
+                    "POST method - Stateless actor does not hold any message !!!", ++messageCounter);
             sender().tell(response, self());
         } else {
             unhandled(message);
