@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "066b3ed4-0816-4e62-aada-6eb198015d17",
+		"name": "Akka-Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get-stateless-async-non-blocking",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/stateless-async-non-blocking/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stateless-async-non-blocking",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post-stateless-async-non-blocking Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"payload\": \"Failed to save stateless, asynchronous, non-blocking message.\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/stateless-async-non-blocking/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stateless-async-non-blocking",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post-stateful-async-non-blocking",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"payload\": \"Stateful async non blocking message saved.\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/stateful-async-non-blocking/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stateful-async-non-blocking",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-stateful-async-non-blocking",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/stateful-async-non-blocking/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stateful-async-non-blocking",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-stateful-async-non-blocking",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/stateful-async-non-blocking/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stateful-async-non-blocking",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
